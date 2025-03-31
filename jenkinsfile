@@ -1,50 +1,66 @@
-
 pipeline {
     agent any
-    tools{
-        nodejs'NodeJs'
+    tools {
+      nodejs 'NodeJS'
     }
+
 
     environment {
         NODE_VERSION = "18"
     }
 
     stages {
-        stage('Git Checkout') {
+         stage('git checksum') {
             steps {
-                script {
-                    
-                    git url:"https://github.com/iamsumitkumar10/pipeline-demo.git",branch:"main"
-                }
+               git url:"https://github.com/iamsumitkumar10/pipeline-demo/",branch:"main"  
             }
         }
+
+       stage('Setup NodeJs') {
+            steps {
+                sh"npm install"
+            }
+        }
+
+         
+
         
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    echo "Installing dependencies..."
-                    sh 'npm install'
-                }
-            }
-        }
-        stage('run project') {
-            steps {
-                script {
-                    echo "Running project..."
-                    sh "npm run dev"
-                }
-            }
-        }
 
         stage('Build Project') {
             steps {
                 script {
                     echo "Building project..."
-                    sh 'npm run build'
+                    sh "npm run build"
                 }
             }
         }
 
+        // stage('Deploy to Production') {
+        //     when {
+        //         branch 'main'  // Deploy only from the main branch
+        //     }
+        //     steps {
+        //         script {
+        //             echo "Deploying to production..."
+                    
+        //             // Example: Deploying to GitHub Pages
+        //             sh '''
+        //             git config --global user.email "you@example.com"
+        //             git config --global user.name "Your Name"
+        //             git checkout --orphan gh-pages
+        //             git --work-tree=dist add --all
+        //             git --work-tree=dist commit -m "Deploy"
+        //             git push origin HEAD:gh-pages --force
+        //             '''
+                    
+        //             // Example: Deploying via SCP to a server
+        //             // sh 'scp -r dist/* user@your-server:/var/www/html/'
+
+        //             // Example: Using PM2 to restart server
+        //             // sh 'pm2 restart your-app'
+        //         }
+        //     }
+        // }
     }
 
     post {
