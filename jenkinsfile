@@ -6,7 +6,7 @@ pipeline{
         stage("checkout"){
             steps{
                 echo "========checkout url of project========"
-                git url:""
+                git url:"https://github.com/iamsumitkumar10/pipeline-demo.git"
             }
         }
 
