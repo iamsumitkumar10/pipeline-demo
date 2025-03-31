@@ -1,0 +1,48 @@
+pipeline{
+    agent{
+        label "node"
+    }
+    stages{
+        stage("checkout"){
+            steps{
+                echo "========checkout url of project========"
+                git url:""
+            }
+        }
+
+        stage("dependencies install"){
+            steps{
+                echo "=====npm insatll======="
+                sh 'npm install'
+            }
+        }
+
+        stage("run project"){
+            steps{
+                echo "running project url here "
+                sh 'npm run dev'
+            }
+        }
+
+        stage("project build here"){
+            steps{
+                echo "project build "
+                sh 'npm run build'
+            }
+        }
+    }    
+
+
+
+    post{
+        always{
+            echo "========default always========"
+        }
+        success{
+            echo "========successfully ========"
+        }
+        failure{
+            echo "======== failed========"
+        }
+    }
+}
